@@ -7,20 +7,15 @@ function App() {
   const [mode, setMode] = useState<'select' | 'input' | 'none'>('none');
   const [ceil, setCeil] = useState<{ type: 'part' | 'outcome', value: number }>();
   const [isStarted, setIsStarted] = useState(false);
-
   const [items, setItems] = useState<{ x: number, y: number, possibleAnswers?: Set<number> }[]>([]);
-
   const [count, setCount] = useState(0);
-
   const [error, setError] = useState<string | null>(null);
-
   const [aswers, setAnswers] = useState<{ x: number, y: number, usersAnswer: number }[]>([]);
-
   const [isFinished, setIsFinished] = useState(false);
 
   const start = useCallback(() => {
 
-    let a: { x: number, y: number, possibleAnswers?: Set<number> }[] = [];
+    const a: { x: number, y: number, possibleAnswers?: Set<number> }[] = [];
 
     if (ceil?.type === 'outcome') {
 
@@ -37,12 +32,23 @@ function App() {
         }
 
       }
+      
+    } else if (ceil?.type === 'part') {
+      for (let i = 1; i <= ceil.value; i++) {
+        for (let j = 1; j <= ceil.value; j++) {
 
-      setItems(a.sort(() => Math.random() - 0.5));
+          const random = Math.round(Math.random() * 3) + 1;
+          const possibleAnswers = new Set<number>([i * j, i * j + random, Math.abs(i * j - random), Math.abs((i + random) * j), Math.abs(i * (j + random))].sort(() => Math.random() - 0.5));
 
-      setIsStarted(true);
+          a.push({ x: i, y: j, possibleAnswers });
+        }
+      } 
     }
-  }, [mode, ceil]);
+
+    setItems(a.sort(() => Math.random() - 0.5));
+
+    setIsStarted(true);
+  }, [ceil]);
 
   return (
     <>
@@ -111,7 +117,7 @@ function App() {
         }
 
         {
-          !!error ? (
+          error ? (
             <Alert severity='error' sx={{ marginTop: '1rem' }} onClose={() => setError(null)}>
               {error}
             </Alert>
@@ -168,7 +174,7 @@ function App() {
                         } else {
                           setError('Błędna odpowiedź, spróbuj ponownie.');
                         }
-                        (e.target as any).value = '';
+                        (e.target as HTMLInputElement).value = '';
                         setAnswers([...aswers, { x: items[count].x, y: items[count].y, usersAnswer: value }]);
                       }
                     }}
