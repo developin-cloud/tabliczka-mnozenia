@@ -173,7 +173,7 @@ function App() {
               Zacznij od nowa
             </Button>
             <Typography variant='h4' sx={{ marginTop: '1rem' }}>
-              Gratulacje! Ukończyłeś ćwiczenie.
+              Gratulacje! Ćwiczenie ukończone.
             </Typography>
             <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
 
