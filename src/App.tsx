@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import './App.css'
 import { Alert, Button, Grid, List, ListItem, ListItemIcon, ListItemText, Paper, TextField, Typography } from '@mui/material'
 import { SentimentDissatisfied, SentimentSatisfied } from '@mui/icons-material';
+import { generateMultiplicationItems } from './multiply/logic';
 
 function App() {
   const [mode, setMode] = useState<'select' | 'input' | 'none'>('none');
@@ -15,39 +16,11 @@ function App() {
 
   const start = useCallback(() => {
 
-    const a: { x: number, y: number, possibleAnswers?: Set<number> }[] = [];
-
-    if (ceil?.type === 'outcome') {
-
-      for (let i = 1; i <= 10; i++) {
-        for (let j = 1; j <= 10 / i; j++) {
-          if (i * j <= ceil.value) {
-
-            const random = Math.round(Math.random() * 3) + 1;
-            const possibleAnswers = new Set<number>([i * j, i * j + random, Math.abs(i * j - random), Math.abs((i + random) * j), Math.abs(i * (j + random))].sort(() => Math.random() - 0.5));
-
-            a.push({ x: i, y: j, possibleAnswers });
-          }
-
-        }
-
-      }
-      
-    } else if (ceil?.type === 'part') {
-      for (let i = 1; i <= ceil.value; i++) {
-        for (let j = 1; j <= ceil.value; j++) {
-
-          const random = Math.round(Math.random() * 3) + 1;
-          const possibleAnswers = new Set<number>([i * j, i * j + random, Math.abs(i * j - random), Math.abs((i + random) * j), Math.abs(i * (j + random))].sort(() => Math.random() - 0.5));
-
-          a.push({ x: i, y: j, possibleAnswers });
-        }
-      } 
+    if (ceil) {
+      setItems(generateMultiplicationItems(ceil));
+      setIsStarted(true);
     }
 
-    setItems(a.sort(() => Math.random() - 0.5));
-
-    setIsStarted(true);
   }, [ceil]);
 
   return (
@@ -94,7 +67,7 @@ function App() {
                     key={value}
                     variant='outlined'
                     sx={{ margin: '0.5rem' }}
-                    onClick={() => setCeil({ type: 'outcome', value: value * 10 })}
+                    onClick={() => setCeil({ type: 'part', value })}
                   >
                     {value}
                   </Button>
