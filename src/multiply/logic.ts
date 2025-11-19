@@ -19,7 +19,7 @@ export function generateMultiplicationItems(ceil: { type: 'part' | 'outcome', va
       
     } else if (ceil?.type === 'part') {
       for (let i = 1; i <= ceil.value; i++) {
-        for (let j = 1; j <= ceil.value; j++) {
+        for (let j = 1; j <= 10; j++) {
 
           const random = Math.round(Math.random() * 3) + 1;
           const possibleAnswers = new Set<number>([i * j, i * j + random, Math.abs(i * j - random), Math.abs((i + random) * j), Math.abs(i * (j + random))].sort(() => Math.random() - 0.5));
