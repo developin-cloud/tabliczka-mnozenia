@@ -4,7 +4,7 @@ export function generateMultiplicationItems(ceil: { type: 'part' | 'outcome', va
     if (ceil?.type === 'outcome') {
 
       for (let i = 1; i <= 10; i++) {
-        for (let j = 1; j <= 10 / i; j++) {
+        for (let j = 1; j <= 10; j++) {
           if (i * j <= ceil.value) {
 
             const random = Math.round(Math.random() * 3) + 1;
